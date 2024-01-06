@@ -1,0 +1,5 @@
+#! /bin/bash
+consultatty=$( ps -a | grep ttyp0 | cut -c2-c6 )
+#echo $consultatty
+kill -SIGKILL $consultatty
+echo "Listo!"

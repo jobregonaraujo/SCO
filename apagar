@@ -1,0 +1,3 @@
+#! /bin/sh
+shutdown -g0 -y
+exit 0
