@@ -37,18 +37,25 @@ do
     cp -prf $caja "/mnt/$caja"
     echo -e "Terminamos de copiar $caja de manera correcta...\n\n"
 done
+###
 ###Opcional todavia no se si va a ir aqui
-#read -p "Deseas transferir el profile del root y los archivos fiscal* (y/N): " rootfiscal
-#if [[ "$rootfiscal" == "y"]]
-#then
-#    echo -e "Transfiriendo root profile ...\n"
-#    cp -pf  "$rootprofile" "/mnt$rootprofile"
-#    echo -e "Root Profile transferido correctamente.\n"
-#    echo -e "Transfiriendo bin/fiscal...\n"
-#    cp -pf "$fiscal*" "/mnt/bin/" 
-#    echo -e "Transferido Correctamente Profile y fiscal\n"
-#fi
-
+read -p "Deseas transferir el profile del root y los archivos fiscal* (y/N): " rootfiscal
+if [[ "$rootfiscal" == "y" ]]
+then
+    echo -e "Transfiriendo root profile ...\n"
+    cp -pf  "$rootprofile" "/mnt$rootprofile"
+    echo -e "Root Profile transferido correctamente.\n"
+    echo -e "Transfiriendo bin/fiscal...\n"
+    cp -pf "$fiscal" "/mnt/usr/bin/"
+    for i in {2..8}
+    do
+        if [[ -e "$fiscal$i" ]]
+        then
+            cp -pf "$fiscal$i" "/mnt/usr/bin/"
+        fi
+    done
+    echo -e "Transferido Correctamente Profile y fiscal\n"
+fi
 #####
 # Desmontar Disco Duro de Respaldo
 umount /mnt
