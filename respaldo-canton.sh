@@ -1,11 +1,11 @@
 #! /usr/bin/bash
 #vars
 rootprofile="/var/opt/K/SCO/Unix/6.0.0Ni/.profile"
-fiscal=$(which fiscal)
 cajas=('/u/resta')
 #Revisamos y agregamos las carpetas de caja* existentes en /u y las agregamos al array
 for i in {2..10}
 do
+
     if [ -d "/u/caja$i" ]
     then
         cajas+=("/u/caja$i")
@@ -25,16 +25,16 @@ fi
 
 if [ -n "$(ls -A /mnt)" ]
 then
-umount /mnt
+umount /mnt || { echo "Error desmontando /mnt"; exit 1; }
 fi
 
-mount "/dev/dsk/$discorespaldo" /mnt
+mount "/dev/dsk/$discorespaldo" /mnt || { echo "Error al montar /dev/dsk/$discorespaldo"; exit 1; }
 
 # copiar y remplazar cajas
 for caja in "${cajas[@]}"
 do
     echo -e "Estamos trabajando , no tques nada hasta que terminemos , por favor!!\n\n"
-    cp -prf $caja "/mnt/$caja"
+    cp -prf $caja "/mnt/u/" || { echo "Error copiando  $dir"; exit 1; }
     echo -e "Terminamos de copiar $caja de manera correcta...\n\n"
 done
 ###
@@ -43,15 +43,15 @@ read -p "Deseas transferir el profile del root y los archivos fiscal* (y/N): " r
 if [[ "$rootfiscal" == "y" ]]
 then
     echo -e "Transfiriendo root profile ...\n"
-    cp -pf  "$rootprofile" "/mnt$rootprofile"
+    cp -pf  "$rootprofile" "/mnt$rootprofile"  || { echo "Error copiando  $rootprofile"; exit 1; }
     echo -e "Root Profile transferido correctamente.\n"
     echo -e "Transfiriendo bin/fiscal...\n"
-    cp -pf "$fiscal" "/mnt/usr/bin/"
+    cp -pf "$fiscal" "/mnt/usr/bin/" || { echo "Error copiando  $fiscal"; exit 1; }
     for i in {2..8}
     do
-        if [[ -e "$fiscal$i" ]]
+        if [[ -e "/usr/bin/fiscal$i" ]]
         then
-            cp -pf "$fiscal$i" "/mnt/usr/bin/"
+            cp -pf "/usr/bun/fiscal$i" "/mnt/usr/bin/"  || { echo "Error copiando  fiscal$i"; exit 1; }
         fi
     done
     echo -e "Transferido Correctamente Profile y fiscal\n"
