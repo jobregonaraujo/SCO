@@ -16,7 +16,7 @@ do
 done
 
 #Chequeamos si existe la carpeta de respaldo 
-if [[ ! -d "$crespaldo"]]
+if [[ ! -d "$crespaldo" ]]
 then
     echo -e "Creando la carpeta para respaldos en $crespaldo...\n"
     mkkdir /backups || { echo "Error creando la carpeta de respaldo $crespaldo "; exit 1; }
@@ -25,6 +25,7 @@ fi
 for caja in "${cajas[@]}"
 do
 zip -rq "$crespaldo/$caja-$now.zip" /u/$caja || { echo "Error comprimiendo  $caja"; exit 1; }
+done
 ## Opcional respaldar fiscal y rootprofile
 read -p "Deseas respaldar el profile del root y los archivos fiscal* (y/N): " rootfiscal
 if [[ "$rootfiscal" == "y" ]]
