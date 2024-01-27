@@ -19,7 +19,7 @@ done
 if [[ ! -d "$crespaldo" ]]
 then
     echo -e "Creando la carpeta para respaldos en $crespaldo...\n"
-    mkkdir /backups || { echo "Error creando la carpeta de respaldo $crespaldo "; exit 1; }
+    mkdir /backups || { echo "Error creando la carpeta de respaldo $crespaldo "; exit 1; }
 fi
 #Creamos los respaldos de las carpetas de usuarios en la carpeta de respaldo
 for caja in "${cajas[@]}"
