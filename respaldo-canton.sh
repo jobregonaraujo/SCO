@@ -37,8 +37,12 @@ mount "/dev/dsk/$discorespaldo" /mnt || { echo "Error al montar /dev/dsk/$discor
 # copiar y remplazar cajas
 for caja in "${cajas[@]}"
 do
-    if [[ "$day" == $dob || "$day" == "26" ]] # Chequeando el dia para hacer respaldo en zip comprimido si corresponde
+    if [[ "$day" == $dob ]] # Chequeando el dia para hacer respaldo en zip comprimido si corresponde
     then
+        if [[ -f "/mnt/u/$caja-$now.zip" ]]
+        then
+            echo "Ya se realizo un respaldo de dia $now , nos detendremos aqui..."; exit 1;
+        fi
         echo -e "Hoy es $dob asi que procedemos a realizar un respaldo del mes en zip \n"
         zip -rq "/mnt/u/$caja-$now.zip" "/mnt/u/$caja" || { echo "Error comprimiendo  $caja"; exit 1; }
     fi
