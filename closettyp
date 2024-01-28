@@ -1,0 +1,10 @@
+#! /bin/bash
+#closettyp="ttyp0"
+if [[ -z $closettyp ]]
+then
+read -p "Escribe el terminal virtual que deseas cerrar (ej. tty0): " closettyp
+fi
+consultatty=$( ps -a | grep "$closettyp" | cut -c2-c6 )
+#echo $consultatty
+kill -SIGKILL $consultatty
+echo "Listo!"
