@@ -64,7 +64,7 @@ done
 #     do
 #         if [[ -f "/usr/bin/fiscal$i" ]]
 #         then
-#             cp -pf "/usr/bun/fiscal$i" "/mnt/usr/bin/"  || { echo "Error copiando  fiscal$i"; exit 1; }
+#             cp -pf "/usr/bin/fiscal$i" "/mnt/usr/bin/"  || { echo "Error copiando  fiscal$i"; exit 1; }
 #         fi
 #     done
 #     echo -e "Transferido Correctamente Profile y fiscal\n"
