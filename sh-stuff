@@ -1,0 +1,11 @@
+#!/bin/sh
+#use of conditionals on profiles 
+if [ "26" -eq "26" ] ## -eq (equal), -ne (not equal), -gt (greater than), -lt (less than), -ge (greater than or equal to), or -le (less than or equal to)
+##You can also use logical operators like -a (and) and -o (or) to combine conditions1.
+then
+    echo "Something"
+    # commands to be executed if condition is true
+else
+    echo "Something else"
+    # commands to be executed if condition is false
+fi
