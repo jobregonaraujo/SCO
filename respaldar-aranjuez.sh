@@ -28,7 +28,7 @@ echo -e "Realizando respaldo de $caja en $crespaldo... Por favor esperar...\n"
 zip -rq "$crespaldo/$caja-$now.zip" /u/$caja || { echo "Error comprimiendo  $caja"; exit 1; }
 done
 ## Opcional respaldar fiscal y rootprofile
-read -t 10 -p "Deseas respaldar el profile del root y los archivos fiscal* (y/N): " rootfiscal
+read -t 200 -p "Deseas respaldar el profile del root y los archivos fiscal* (y/N): " rootfiscal
 if [[ "$rootfiscal" == "y" ]]
 then
     echo -e "comprimiendo root profile ...\n"
@@ -36,6 +36,6 @@ then
     echo -e "Root Profile respaldado correctamente.\ncomprimiendo bin/fiscal...\n"
     zip -q "$crespaldo/fiscalbin-$now.zip" /usr/bin/fiscal*
 else
-    echo -e "No se realizo el backup del profile o de los archivos bin/fiscal*\n"
+    echo -e "\nNo se realizo el backup del profile o de los archivos bin/fiscal*\n"
 fi
 echo -e "Listo!\n"
