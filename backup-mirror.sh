@@ -1,8 +1,11 @@
 #! /usr/bin/bash
+echo -e "\nEste Script realizara una copia de las carpetas y archivos de ususario y otros importantes ,
+ desde el disco duro en el que esta siendo ejecutado a un disco espejo con el SO SCO 6 instalado\n
+ HDD-Active to HDD-Secundary\n"
 #vars
 day=$(date +"%d")
 now=$(date +"%d-%m-%Y")
-dob="01"
+dayofbackup="01"
 rootprofile="/var/opt/K/SCO/Unix/6.0.0Ni/.profile"
 cajas=('resta')
 #Revisamos y agregamos las carpetas de caja* existentes en /u y las agregamos al array
@@ -23,7 +26,7 @@ if [[ -z "$discorespaldo" ]]
 then
 #unset $discorespaldo
 getlclfsdev #Listado de dispositivos de alamacenamiento
-echo -e "Arriba se ven los dispositivos conectados\n"
+echo -e "\nArriba se ven los dispositivos conectados\n"
 read -p "Escribe el identificador del disco que deseas utilizar como espejo o respaldo eg(c1b0t0xxxp1s2) es el que pone vxfs al lado: " discorespaldo 
 fi
 #Chequeamos si exiten archivos o carpetas en /mnt si hay algo se procede a desmontar
@@ -37,22 +40,18 @@ mount "/dev/dsk/$discorespaldo" /mnt || { echo "Error al montar /dev/dsk/$discor
 # copiar y remplazar cajas
 for caja in "${cajas[@]}"
 do
-    echo -e "Estamos tranfiriendo $caja al disco de respaldo , no tques nada hasta que terminemos , por favor!!...\n\n"
+    # if [[ "$day" == $dayofbackup ]] # Chequeando el dia para hacer respaldo en zip comprimido si corresponde
+    # then
+    #     if [[ -f "/mnt/u/$caja-$now.zip" ]]
+    #     then
+    #         echo "Ya se realizo un respaldo de dia $now , nos detendremos aqui..."; exit 1;
+    #     fi
+    #     echo -e "Hoy es $dayofbackup asi que procedemos a realizar un respaldo del mes en zip \n"
+    #     zip -rq "/mnt/u/$caja-$now.zip" "/mnt/u/$caja" || { echo "Error comprimiendo  $caja"; exit 1; }
+    # fi
+    echo -e "Copiando $caja al disco de respaldo , no toques nada hasta que terminemos , por favor!!...\n\n"
     cp -prf "/u/$caja" "/mnt/u/" || { echo "Error copiando  $caja"; exit 1; }
     echo -e "Terminamos de copiar $caja de manera correcta...\n\n"
-done
-## Verificar el dia y realizar un backup en ZIP 
-for caja in "${cajas[@]}"
-do
-    if [[ "$day" == $dob ]] # Chequeando el dia para hacer respaldo en zip comprimido si corresponde
-    then
-        if [[ -f "/mnt/u/$caja-$now.zip" ]]
-        then
-            echo "Ya se realizo un respaldo del dia $now "
-        fi
-        echo -e "Hoy es $dob asi que procedemos a realizar un respaldo del mes en zip \n"
-        zip -rq "/mnt/u/$caja-$now.zip" "/mnt/u/$caja" || { echo "Error comprimiendo  $caja"; exit 1; }
-    fi
 done
 ###
 ###Opcional todavia no esta listo! Debug en progreso
