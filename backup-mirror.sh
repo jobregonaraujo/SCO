@@ -36,7 +36,7 @@ umount /mnt || { echo "Error desmontando /mnt prueba borrando el contenido de /m
 fi
 #Montando disco de respaldo con el identificador indicado anteriormente
 mount "/dev/dsk/$discorespaldo" /mnt || { echo "Error al montar /dev/dsk/$discorespaldo"; exit 1; }
-
+if [[ ! -d "/mnt/u" ]] ; then echo -e "Es probable que $discorespaldo no sea el identificador correcto"; exit 1; fi 
 # copiar y remplazar cajas
 for caja in "${cajas[@]}"
 do
@@ -62,7 +62,11 @@ then
     cp -pf  "$rootprofile" "/mnt$rootprofile"  || { echo "Error copiando  $rootprofile"; exit 1; }
     echo -e "Root Profile transferido correctamente.\n"
     echo -e "Transfiriendo bin/fiscal...\n"
-#    cp -pf "$fiscal" "/mnt/usr/bin/" || { echo "Error copiando  $fiscal"; exit 1; }
+    if [[ -f "/usr/bin/fiscal" ]]
+    then
+        cp -pf "/usr/bin/fiscal" "/mnt/usr/bin/" || { echo "Error Copiando el archivo fiscal"; exit 1; }
+    fi
+
     for i in {2..8}
     do
         if [[ -f "/usr/bin/fiscal$i" ]]

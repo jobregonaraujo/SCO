@@ -2,7 +2,7 @@
 #vars
 day=$(date +"%d")
 now=$(date +"%d-%m-%Y")
-dob="01"
+dob="26"
 rootprofile="/var/opt/K/SCO/Unix/6.0.0Ni/.profile"
 cajas=('resta')
 #Revisamos y agregamos las carpetas de caja* existentes en /u y las agregamos al array
@@ -33,7 +33,7 @@ umount /mnt || { echo "Error desmontando /mnt prueba borrando el contenido de /m
 fi
 #Montando disco de respaldo con el identificador indicado anteriormente
 mount "/dev/dsk/$discorespaldo" /mnt || { echo "Error al montar /dev/dsk/$discorespaldo"; exit 1; }
-
+if [[ ! -d "/mnt/u" ]] ; then echo -e "Es probable que $discorespaldo no sea el identificador correcto"; exit 1; fi 
 # copiar y remplazar cajas
 for caja in "${cajas[@]}"
 do
@@ -42,16 +42,21 @@ do
     echo -e "Terminamos de copiar $caja de manera correcta...\n\n"
 done
 ## Verificar el dia y realizar un backup en ZIP 
+if [ "$(ls -1 "/u/" | grep '\.zip$' | wc -l)" -gt 0 ] && [ "$day" == $dob ]
+then
+find /u/ -level 0 -name "*.zip" -exec rm -f {} \; 
+fi
 for caja in "${cajas[@]}"
 do
     if [[ "$day" == $dob ]] # Chequeando el dia para hacer respaldo en zip comprimido si corresponde
-    then
-        if [[ -f "/mnt/u/$caja-$now.zip" ]]
         then
-            echo "Ya se realizo un respaldo del dia $now "
-        fi
-        echo -e "Hoy es $dob asi que procedemos a realizar un respaldo del mes en zip \n"
-        zip -rq "/mnt/u/$caja-$now.zip" "/mnt/u/$caja" || { echo "Error comprimiendo  $caja"; exit 1; }
+            if [[ -f "/u/$caja-$now.zip" ]]
+                then
+                echo "Ya se realizo un respaldo del dia $now "
+                else
+                echo -e "Hoy es $dob asi que procedemos a realizar un respaldo del mes en zip de $caja \n"
+                zip -rq "/u/$caja-$now.zip" "/u/$caja" || { echo "Error comprimiendo  $caja"; exit 1; }
+            fi
     fi
 done
 ###
@@ -64,6 +69,10 @@ then
     echo -e "Root Profile transferido correctamente.\n"
     echo -e "Transfiriendo bin/fiscal...\n"
 #    cp -pf "$fiscal" "/mnt/usr/bin/" || { echo "Error copiando  $fiscal"; exit 1; }
+    if [[ -f "/usr/bin/fiscal" ]]
+    then
+        cp -pf "/usr/bin/fiscal" "/mnt/usr/bin/" || { echo "Error Copiando el archivo fiscal"; exit 1; }
+    fi
     for i in {2..8}
     do
         if [[ -f "/usr/bin/fiscal$i" ]]

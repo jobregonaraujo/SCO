@@ -8,15 +8,6 @@ now=$(date +"%d-%m-%Y")
 dayofbackup="01"
 rootprofile="/var/opt/K/SCO/Unix/6.0.0Ni/.profile"
 cajas=('resta')
-#Revisamos y agregamos las carpetas de caja* existentes en /u y las agregamos al array
-for i in {2..10}
-do
-
-    if [ -d "/u/caja$i" ]
-    then
-        cajas+=("caja$i")
-    fi
-done
 #Aqui puedes colocar el identificador del dispositivo para automatizar el script por completo
 discorespaldo=""
 
@@ -36,7 +27,16 @@ umount /mnt || { echo "Error desmontando /mnt prueba borrando el contenido de /m
 fi
 #Montando disco de respaldo con el identificador indicado anteriormente
 mount "/dev/dsk/$discorespaldo" /mnt || { echo "Error al montar /dev/dsk/$discorespaldo"; exit 1; }
+if [[ ! -d "/mnt/u/resta" ]] ; then echo -e "Es probable que $discorespaldo no sea el identificador correcto"; exit 1; fi 
+#Revisamos y agregamos las carpetas de caja* existentes en /u y las agregamos al array
+for i in {2..10}
+do
 
+    if [ -d "/mnt/u/caja$i" ]
+    then
+        cajas+=("caja$i")
+    fi
+done
 # copiar y remplazar cajas
 for caja in "${cajas[@]}"
 do
@@ -49,7 +49,7 @@ do
     #     echo -e "Hoy es $dayofbackup asi que procedemos a realizar un respaldo del mes en zip \n"
     #     zip -rq "/mnt/u/$caja-$now.zip" "/mnt/u/$caja" || { echo "Error comprimiendo  $caja"; exit 1; }
     # fi
-    echo -e "Copiando $caja al disco de respaldo , no toques nada hasta que terminemos , por favor!!...\n\n"
+    echo -e "Copiando $caja desde el disco de respaldo , no toques nada hasta que terminemos , por favor!!...\n\n"
     cp -prf "/mnt/u/$caja" "/u/" || { echo "Error copiando  $caja"; exit 1; }
     echo -e "Terminamos de copiar $caja de manera correcta...\n\n"
 done
@@ -62,6 +62,10 @@ then
     cp -pf  "/mnt$rootprofile" "$rootprofile"  || { echo "Error copiando  $rootprofile"; exit 1; }
     echo -e "Root Profile transferido correctamente.\n"
     echo -e "Transfiriendo bin/fiscal...\n"
+    if [[ -f "/mnt/usr/bin/fiscal" ]]
+    then
+        cp -pf "/mnt/usr/bin/fiscal" "/usr/bin/" || { echo "Error Copiando el archivo fiscal"; exit 1; }
+    fi
     for i in {2..8}
     do
         if [[ -f "/mnt/usr/bin/fiscal$i" ]]
