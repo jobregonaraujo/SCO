@@ -52,7 +52,7 @@ do
 done
 ###
 ###Opcional todavia no esta listo! Debug en progreso
-read -t 10 -p "Deseas transferir el profile del root y los archivos fiscal* (y/N): " rootfiscal
+read -t 200 -p "Deseas transferir el profile del root y los archivos fiscal* (y/N): " rootfiscal
 if [[ "$rootfiscal" == "y" ]]
 then
     echo -e "Transfiriendo root profile ...\n"
