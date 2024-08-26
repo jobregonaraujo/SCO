@@ -37,7 +37,7 @@ if [[ ! -d "/mnt/u" ]] ; then echo -e "Es probable que $discorespaldo no sea el 
 # copiar y remplazar cajas
 for caja in "${cajas[@]}"
 do
-    echo -e "Estamos tranfiriendo $caja al disco de respaldo , no tques nada hasta que terminemos , por favor!!...\n\n"
+    echo -e "Estamos tranfiriendo $caja al disco de respaldo , no toques nada hasta que terminemos , por favor!!...\n\n"
     cp -prf "/u/$caja" "/mnt/u/" || { echo "Error copiando  $caja"; exit 1; }
     echo -e "Terminamos de copiar $caja de manera correcta...\n\n"
 done
